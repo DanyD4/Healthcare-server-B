@@ -1,7 +1,7 @@
 package health.care.booking.services;
 
 
-import health.care.booking.models.Role;
+import health.care.booking.models.ERole;
 import health.care.booking.models.User;
 import health.care.booking.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class UserService {
 
         // ensure the user has at least the default role
         if (user.getRoles() == null || user.getRoles().isEmpty()) {
-            user.setRoles(Set.of(Role.USER));
+            user.setRoles(Set.of(ERole.ROLE_USER));
         }
 
         userRepository.save(user);

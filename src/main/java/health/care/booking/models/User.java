@@ -1,6 +1,7 @@
 package health.care.booking.models;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Set;
@@ -13,16 +14,16 @@ public class User {
 
     private String username;
     private String password;
-
-    private Set<Role> roles;
+    @DBRef
+    private Set<ERole> ERoles;
 
     public User() {
     }
 
-    public User(String username, String password, Set<Role> roles) {
+    public User(String username, String password, Set<ERole> ERoles) {
         this.username = username;
         this.password = password;
-        this.roles = roles;
+        this.ERoles = ERoles;
     }
 
 
@@ -47,11 +48,11 @@ public class User {
     }
 
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Set<ERole> getRoles() {
+        return ERoles;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRoles(Set<ERole> ERoles) {
+        this.ERoles = ERoles;
     }
 }

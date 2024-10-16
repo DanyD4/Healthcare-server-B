@@ -4,7 +4,7 @@ import health.care.booking.dto.AuthRequest;
 import health.care.booking.dto.AuthResponse;
 import health.care.booking.dto.RegisterRequest;
 import health.care.booking.dto.RegisterResponse;
-import health.care.booking.models.Role;
+import health.care.booking.models.ERole;
 import health.care.booking.models.User;
 import health.care.booking.services.CustomUserDetailsService;
 import health.care.booking.services.UserService;
@@ -113,7 +113,7 @@ public class AuthController {
 
         // assign roles
         if (request.getRoles() == null || request.getRoles().isEmpty()) {
-            user.setRoles(Set.of(Role.USER));
+            user.setRoles(Set.of(ERole.ROLE_USER));
         } else {
             user.setRoles(request.getRoles());
         }
