@@ -6,15 +6,15 @@ import java.util.Set;
 public class AuthResponse {
     private String jwtToken;
     private String username;
-    private Set<ERole> ERoles;
+    private Set<ERole> roles;
 
     public AuthResponse() {
     }
 
-    public AuthResponse(String jwtToken, String username, Set<ERole> ERoles) {
+    public AuthResponse(String jwtToken, String username, Set<ERole> roles) {
         this.jwtToken = jwtToken;
         this.username = username;
-        this.ERoles = ERoles;
+        this.roles = roles;
     }
 
     public String getJwtToken() {
@@ -34,11 +34,11 @@ public class AuthResponse {
     }
 
     public Set<ERole> getRoles() {
-        return ERoles;
+        return roles;
     }
 
-    public void setRoles(Set<ERole> ERoles) {
-        this.ERoles = ERoles;
+    public void setRoles(Set<ERole> roles) {
+        this.roles = roles;
     }
 }
 

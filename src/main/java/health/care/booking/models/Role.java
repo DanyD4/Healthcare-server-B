@@ -8,10 +8,14 @@ public class Role {
     @Id
     private String id;
 
-    private ERole rolePermission;
+    private ERole roleP;
 
-    public Role () {
+    public Role() {
 
+    }
+
+    public Role(ERole roleP) {
+        this.roleP = roleP;
     }
 
     public String getId() {
@@ -22,11 +26,12 @@ public class Role {
         this.id = id;
     }
 
-    public ERole getRolePermission() {
-        return rolePermission;
+    public ERole getRoleP() {
+        return roleP;
     }
 
-    public void setRolePermission(ERole rolePermission) {
-        this.rolePermission = rolePermission;
+    public void setRoleP(ERole roleP) {
+        this.roleP = roleP;
     }
 }
+

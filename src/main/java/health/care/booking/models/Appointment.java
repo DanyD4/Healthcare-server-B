@@ -19,7 +19,7 @@ public class Appointment {
 
     // datum och tid, vill ni så kan ni ändra till något annat
     // tex ett fält för datum ett för tid det är upp till er
-    private LocalDateTime dateTime;
+    private LocalDateTime dateTime; // ändra till date
 
     // använder Enum Status klassen
     private Status status;

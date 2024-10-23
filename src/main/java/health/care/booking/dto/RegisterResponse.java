@@ -9,15 +9,15 @@ public class RegisterResponse {
 
     private String message;
     private String username;
-    private Set<ERole> ERoles;
+    private Set<ERole> roles;
 
     public RegisterResponse() {
     }
 
-    public RegisterResponse(String message, String username, Set<ERole> ERoles) {
+    public RegisterResponse(String message, String username, Set<ERole> roles) {
         this.message = message;
         this.username = username;
-        this.ERoles = ERoles;
+        this.roles = roles;
     }
 
     public String getMessage() {
@@ -37,10 +37,10 @@ public class RegisterResponse {
     }
 
     public Set<ERole> getRoles() {
-        return ERoles;
+        return roles;
     }
 
-    public void setRoles(Set<ERole> ERoles) {
-        this.ERoles = ERoles;
+    public void setRoles(Set<ERole> roles) {
+        this.roles = roles;
     }
 }

@@ -20,11 +20,11 @@ public class AuthRequest {
         this.password = password;
     }
 
-    public @NotBlank String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    public @NotBlank String getPassword() {
+    public String getPassword() {
         return password;
     }
 
