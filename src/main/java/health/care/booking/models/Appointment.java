@@ -4,7 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Document(collection = "appointment")
 public class Appointment {
@@ -17,15 +18,14 @@ public class Appointment {
     @DBRef
     private User caregiverId;
 
-    // datum och tid, vill ni så kan ni ändra till något annat
-    // tex ett fält för datum ett för tid det är upp till er
-    private LocalDateTime dateTime;
+    // Olika fält för datum och tid
+    private LocalDate date;
+    private LocalTime time;
 
-    // använder Enum Status klassen
     private Status status;
 
-    public Appointment() {
-    }
+    public Appointment() {}
+
 
     public String getId() {
         return id;
@@ -51,12 +51,20 @@ public class Appointment {
         this.caregiverId = caregiverId;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public Status getStatus() {
