@@ -14,6 +14,8 @@ import health.care.booking.services.UserService;
 import health.care.booking.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -42,13 +45,11 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private CustomUserDetailsService userDetailsService;
+    CustomUserDetailsService userDetailsService;
 
     @Autowired
     private UserService userService;
 
-   // @Autowired
-    //PasswordEncoder encoder;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -56,11 +57,17 @@ public class AuthController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request,
                                    HttpServletResponse response) {
+        Logger logger = LoggerFactory.getLogger(AuthController.class);
 
         try {
+            logger.info("Authenticating user: {}", request.getUsername());
+            logger.info("Password from request: {}", request.getPassword());
             // authenticate the user
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -74,6 +81,7 @@ public class AuthController {
 
             // get UserDetails
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            logger.info("User authenticated: {}", userDetails.getUsername());
 
             // generate JWT token
             String jwt = jwtUtil.generateToken(userDetails);
@@ -106,8 +114,9 @@ public class AuthController {
                     .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                     .body(authResponse);
 
-        } catch (AuthenticationException e) {
-            // Aauthentication failed
+        }  catch (AuthenticationException e) {
+            logger.error("Authentication failed for user: {}", request.getUsername(), e);
+            // Authentication failed
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body("Incorrect username or password");
@@ -117,6 +126,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
+        Logger logger = LoggerFactory.getLogger(AuthController.class);
 
         // check if the username already exists
         if (userService.existsByUsername(registerRequest.getUsername())) {
@@ -128,8 +138,11 @@ public class AuthController {
         // map the registration request to a User entity
         User user = new User();
         user.setUsername(registerRequest.getUsername());
-        user.setEmail(registerRequest.getEmail());
+        String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
         user.setPassword(registerRequest.getPassword());
+        logger.info("Encoded password: {}", encodedPassword);
+        //user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setEmail(registerRequest.getEmail());
         user.setFirstName(registerRequest.getFirstName());
         user.setLastName(registerRequest.getLastName());
         user.setStreet(registerRequest.getStreet());

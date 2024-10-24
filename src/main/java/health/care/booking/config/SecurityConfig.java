@@ -28,7 +28,7 @@ public class SecurityConfig {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired
-    private CustomUserDetailsService userDetailsService;
+    CustomUserDetailsService userDetailsService; // private ?
 
     @Bean
     public AuthenticationManager authenticationManager(
@@ -36,7 +36,7 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
     /*@Bean
-    public DaoAuthenticationProvider authenticationProvider() {
+    public DaoAuthenticationProvider authenticationProvider() { // NYTT
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -57,6 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/auth/register").permitAll()
+                        .requestMatchers("/api/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

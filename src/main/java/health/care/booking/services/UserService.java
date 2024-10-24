@@ -29,7 +29,7 @@ public class UserService {
         // hash the password
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        userRepository.save(user);
+        //user.setCreatedAt(new Date());
 
         user.setCreatedAt(new Date());
 
@@ -39,7 +39,7 @@ public class UserService {
             userRole.ifPresent(role -> user.setRoles(Set.of(role)));
         }
 
-        //userRepository.save(user);
+        userRepository.save(user);
     }
 
     public User findByUsername(String username) {
