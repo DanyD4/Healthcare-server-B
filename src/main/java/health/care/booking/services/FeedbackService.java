@@ -18,7 +18,7 @@ public class FeedbackService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    public Feedback createFeedback(Feedback feedback) {
+   public Feedback createFeedback(Feedback feedback) {
         //Kontrollera om appointment finns
         Optional<Appointment> appointment = appointmentRepository.findById(feedback.getAppointmentId().getId());
         if (appointment.isPresent()) {
