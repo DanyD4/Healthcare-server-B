@@ -8,7 +8,6 @@ import health.care.booking.models.ERole;
 import health.care.booking.models.Role;
 import health.care.booking.models.User;
 import health.care.booking.respository.RoleRepository;
-import health.care.booking.respository.UserRepository;
 import health.care.booking.services.CustomUserDetailsService;
 import health.care.booking.services.UserService;
 import health.care.booking.util.JwtUtil;
@@ -39,26 +38,26 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager; // ja
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;// ja
 
     @Autowired
-    CustomUserDetailsService userDetailsService;
+    CustomUserDetailsService userDetailsService;// ja
 
     @Autowired
-    private UserService userService;
+    private UserService userService;// ja
 
 
     @Autowired
-    private RoleRepository roleRepository;
+    private RoleRepository roleRepository;// ja
+/*
+    @Autowired
+    UserRepository userRepository;*/
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;// ja
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request,
@@ -140,6 +139,7 @@ public class AuthController {
         user.setUsername(registerRequest.getUsername());
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
         user.setPassword(registerRequest.getPassword());
+        //user.setPassword(encodedPassword);
         logger.info("Encoded password: {}", encodedPassword);
         //user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setEmail(registerRequest.getEmail());
@@ -149,6 +149,7 @@ public class AuthController {
         user.setCity(registerRequest.getCity());
         user.setState(registerRequest.getState());
         user.setZipcode(registerRequest.getZipcode());
+
 
 
 
