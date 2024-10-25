@@ -38,27 +38,25 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
-    private AuthenticationManager authenticationManager; // ja
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JwtUtil jwtUtil;// ja
+    private JwtUtil jwtUtil;
 
     @Autowired
-    CustomUserDetailsService userDetailsService;// ja
+    CustomUserDetailsService userDetailsService;
 
     @Autowired
-    private UserService userService;// ja
+    private UserService userService;
 
 
     @Autowired
-    private RoleRepository roleRepository;// ja
-/*
-    @Autowired
-    UserRepository userRepository;*/
+    private RoleRepository roleRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;// ja
+    private PasswordEncoder passwordEncoder;
 
+    // Lagt till lite loggers för när jag felsökte kan tas bort sedan.
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request,
                                    HttpServletResponse response) {
@@ -121,7 +119,7 @@ public class AuthController {
                     .body("Incorrect username or password");
         }
     }
-
+// Lagt till lite loggers för när jag felsökte kan tas bort sedan.
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
