@@ -1,17 +1,17 @@
 package health.care.booking.dto;
 
-import health.care.booking.models.Role;
+import health.care.booking.models.ERole;
 import java.util.Set;
 
 public class AuthResponse {
     private String jwtToken;
     private String username;
-    private Set<Role> roles;
+    private Set<ERole> roles;
 
     public AuthResponse() {
     }
 
-    public AuthResponse(String jwtToken, String username, Set<Role> roles) {
+    public AuthResponse(String jwtToken, String username, Set<ERole> roles) {
         this.jwtToken = jwtToken;
         this.username = username;
         this.roles = roles;
@@ -33,11 +33,11 @@ public class AuthResponse {
         this.username = username;
     }
 
-    public Set<Role> getRoles() {
+    public Set<ERole> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Set<ERole> roles) {
         this.roles = roles;
     }
 }
