@@ -21,7 +21,7 @@ public class AvailabilityController {
     @Autowired
     private AvailabilityService availabilityService;
 
-    //Endpoint för att skapa en ny tillgänglighetsti
+    //Endpoint för att skapa en ny tillgänglighetstid
     @PostMapping("/availabilities")
     public ResponseEntity<Availability> createAvailability(@RequestBody Availability availability) {
         return new ResponseEntity<>(availabilityService.createAvailability(availability), HttpStatus.CREATED);
@@ -34,7 +34,7 @@ public class AvailabilityController {
         return availabilityService.getAllAvailabilitiesByCaregiverId(caregiverId);
     }
 
-    //Endpoint för att hämta en specifik tillgänglighetstid för en vårdgivar
+    //Endpoint för att hämta en specifik tillgänglighetstid för en vårdgiare
     @GetMapping("/caregivers/{caregiverId}/availabilities/{availabilityId}")
     public ResponseEntity<Availability> getAvailabilityById(@PathVariable String caregiverId, @PathVariable String availabilityId) {
         return ResponseEntity.ok(availabilityService.getAvailabilityById(caregiverId, availabilityId));
@@ -62,7 +62,8 @@ public class AvailabilityController {
     }
 
     //Kontrollera om användaren är admin
-    private boolean isAdmin(Principal principal) {
+   private boolean isAdmin(Principal principal) {
+
         //Konvertera Principal till Authentication för att få användarens detaljer
         User user = (User) ((Authentication) principal).getPrincipal();
 
@@ -73,5 +74,5 @@ public class AvailabilityController {
             }
         }
 
-        return false;
+        return false;*/
     }}
