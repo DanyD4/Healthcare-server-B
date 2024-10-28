@@ -50,4 +50,9 @@ public class UserService {
     public boolean existsByUsername(String username) {
         return userRepository.findByUsername(username).isPresent();
     }
+    public Optional<User> findById(String id) { // nytt
+        return userRepository.findById(id);
+
+    }
+
 }

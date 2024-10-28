@@ -1,5 +1,7 @@
 package health.care.booking.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -47,6 +49,10 @@ public class User {
     private Date createdAt;
 
     public User() {
+    }
+    @JsonCreator
+    public User(@JsonProperty("id") String id) {
+        this.id = id;
     }
 
     public User(String username, String password, String firstName, String lastName, String email, String street, String city, String state, String zipcode) {

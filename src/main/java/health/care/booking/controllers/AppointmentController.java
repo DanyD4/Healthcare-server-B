@@ -1,7 +1,9 @@
 package health.care.booking.controllers;
 
 import health.care.booking.models.Appointment;
+import health.care.booking.models.User;
 import health.care.booking.services.AppointmentService;
+import health.care.booking.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +17,29 @@ public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
 
-    @PostMapping
+    @Autowired
+    private UserService userService;
+
+
+
+   /* @PostMapping
     public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointmentData) {
         Appointment newAppointment = appointmentService.createAppointment(appointmentData);
         return ResponseEntity.ok(newAppointment);
-    }
+    }*/
+   @PostMapping
+   public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointmentData) throws Exception {
+       User patient = userService.findById(appointmentData.getPatientId())
+               .orElseThrow(() -> new Exception("Patient not found"));
+       User caregiver = userService.findById(appointmentData.getCaregiverId())
+               .orElseThrow(() -> new Exception("Caregiver not found"));
+
+       appointmentData.setPatientId(patient.getId());
+       appointmentData.setCaregiverId(caregiver.getId());
+
+       Appointment newAppointment = appointmentService.createAppointment(appointmentData);
+       return ResponseEntity.ok(newAppointment);
+   }
 
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByPatient(@PathVariable String patientId) throws Exception {

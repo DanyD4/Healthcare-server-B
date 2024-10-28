@@ -1,7 +1,6 @@
 package health.care.booking.models;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
@@ -12,11 +11,11 @@ public class Appointment {
     @Id
     private String id;
 
-    @DBRef
-    private User patientId;
+    //@DBRef
+    private String patientId;//user
 
-    @DBRef
-    private User caregiverId;
+    //@DBRef
+    private String caregiverId; //user
 
     // Olika fält för datum och tid
     private LocalDate date;
@@ -36,19 +35,19 @@ public class Appointment {
         this.id = id;
     }
 
-    public User getPatientId() {
+    public String getPatientId() { // User
         return patientId;
     }
 
-    public void setPatientId(User patientId) {
+    public void setPatientId(String patientId) {
         this.patientId = patientId;
     }
 
-    public User getCaregiverId() {
+    public String getCaregiverId() { //USer
         return caregiverId;
     }
 
-    public void setCaregiverId(User caregiverId) {
+    public void setCaregiverId(String caregiverId) {
         this.caregiverId = caregiverId;
     }
 
