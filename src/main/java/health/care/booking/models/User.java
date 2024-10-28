@@ -25,6 +25,10 @@ public class User {
         this.roles = roles;
     }
 
+    public User(String caregiverId) { //testar
+
+    }
+
 
     public String getId() {
         return id;
