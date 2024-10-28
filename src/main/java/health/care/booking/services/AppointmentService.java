@@ -18,6 +18,7 @@ public class AppointmentService {
     @Autowired
     private UserRepository userRepository;
 
+
    /* // Skapa en ny bokning
     public Appointment createAppointment(Appointment appointment) {
         return appointmentRepository.save(appointment);
@@ -40,7 +41,9 @@ public class AppointmentService {
         User patient = userRepository.findById(patientId)
                 .orElseThrow(() -> new Exception("User not found"));
 
+
         return appointmentRepository.findByPatientId(patient.getId());
+
     }
 
     // Hämta alla bokningar för en specifik vårdgivare baserat på caregiverId
@@ -48,13 +51,16 @@ public class AppointmentService {
         User caregiver = userRepository.findById(caregiverId)
                 .orElseThrow(() -> new Exception("User not found"));
 
+
         return appointmentRepository.findByCaregiverId(caregiver.getId());
+
     }
 
     // Hämta en specifik bokning via patientId och boknings-ID
     public Appointment getAppointmentById(String patientId, String appointmentId) throws Exception {
         User patient = userRepository.findById(patientId)
                 .orElseThrow(() -> new Exception("User not found"));
+
 
         return appointmentRepository.findByPatientIdAndId(patient.getId(), appointmentId);
     }
