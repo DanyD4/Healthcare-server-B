@@ -4,7 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Document(collection = "availability")
@@ -16,9 +17,11 @@ public class Availability {
     @DBRef
     private User caregiverId;
 
+    // en lista med datum som är tillgängliga
+    private List<LocalDate> availableDates;
+
     // en lista med tider som är tillgängliga
-    // ni kan ändra implementaionen om ni hittar ett enklare sätt
-    private List<LocalDateTime> availableSlots;
+    private List<LocalTime> availableTimes;
 
     public Availability() {
     }
@@ -39,11 +42,19 @@ public class Availability {
         this.caregiverId = caregiverId;
     }
 
-    public List<LocalDateTime> getAvailableSlots() {
-        return availableSlots;
+    public List<LocalDate> getAvailableDates() {
+        return availableDates;
     }
 
-    public void setAvailableSlots(List<LocalDateTime> availableSlots) {
-        this.availableSlots = availableSlots;
+    public void setAvailableDates(List<LocalDate> availableDates) {
+        this.availableDates = availableDates;
+    }
+
+    public List<LocalTime> getAvailableTimes() {
+        return availableTimes;
+    }
+
+    public void setAvailableTimes(List<LocalTime> availableTimes) {
+        this.availableTimes = availableTimes;
     }
 }

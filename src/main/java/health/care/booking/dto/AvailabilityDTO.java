@@ -1,12 +1,14 @@
 package health.care.booking.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class AvailabilityDTO {
     private String id;
     private String caregiverId;
-    private List<LocalDateTime> availableSlots;
+    private List<LocalDate> availableDates;
+    private List<LocalTime> availableTimes;
 
     public AvailabilityDTO() {
     }
@@ -28,11 +30,21 @@ public class AvailabilityDTO {
         this.caregiverId = caregiverId;
     }
 
-    public List<LocalDateTime> getAvailableSlots() {
-        return availableSlots;
+    public List<LocalDate> getAvailableDates() {
+        return availableDates;
     }
 
-    public void setAvailableSlots(List<LocalDateTime> availableSlots) {
-        this.availableSlots = availableSlots;
+    public void setAvailableDates(List<LocalDate> availableDates) {
+        this.availableDates = availableDates;
     }
+
+    public List<LocalTime> getAvailableTimes() {
+        return availableTimes;
+    }
+
+    public void setAvailableTimes(List<LocalTime> availableTimes) {
+        this.availableTimes = availableTimes;
+    }
+
+
 }

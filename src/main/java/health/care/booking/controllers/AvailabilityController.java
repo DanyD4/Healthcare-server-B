@@ -24,7 +24,9 @@ public class AvailabilityController {
             AvailabilityDTO responseDTO = new AvailabilityDTO();
             responseDTO.setId(newAvailability.getId());
             responseDTO.setCaregiverId(newAvailability.getCaregiverId().getId());
-            responseDTO.setAvailableSlots(newAvailability.getAvailableSlots());
+            responseDTO.setAvailableDates(newAvailability.getAvailableDates());
+            responseDTO.setAvailableTimes(newAvailability.getAvailableTimes());
+            //responseDTO.setAvailableSlots(newAvailability.getAvailableSlots());
             return ResponseEntity.ok(responseDTO);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failed to create availability: " + e.getMessage());
@@ -61,7 +63,9 @@ public class AvailabilityController {
             AvailabilityDTO responseDTO = new AvailabilityDTO();
             responseDTO.setId(updatedAvailability.getId());
             responseDTO.setCaregiverId(updatedAvailability.getCaregiverId().getId());
-            responseDTO.setAvailableSlots(updatedAvailability.getAvailableSlots());
+            responseDTO.setAvailableDates(updatedAvailability.getAvailableDates());
+            responseDTO.setAvailableTimes(updatedAvailability.getAvailableTimes());
+            //responseDTO.setAvailableSlots(updatedAvailability.getAvailableSlots());
             return ResponseEntity.ok(responseDTO);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failed to update availability: " + e.getMessage());

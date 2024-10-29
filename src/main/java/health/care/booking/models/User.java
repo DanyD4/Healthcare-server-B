@@ -25,7 +25,8 @@ public class User {
         this.roles = roles;
     }
 
-    public User(String caregiverId) { //testar
+    public User(String caregiverId) {
+        this.id = caregiverId;//testar
 
     }
 
