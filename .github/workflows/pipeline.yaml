@@ -3,10 +3,10 @@ name: Maven CI
 on:
   push:
     branches:
-      - dev
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   build:
