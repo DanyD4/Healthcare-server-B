@@ -54,7 +54,7 @@ public class AvailabilityServiceTest {
 
         when(availabilityRepository.findByCaregiverId(caregiverId)).thenReturn(List.of(availability1, availability2));
 
-        //Act
+        //Act testgdi
         List<AvailabilityDTO> result = availabilityService.getAllAvailabilitiesByCaregiverId(caregiverId);
 
         //Assert
