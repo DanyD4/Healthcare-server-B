@@ -68,6 +68,11 @@ public class User {
 
     }
 
+    public User(String caregiverId) {
+        this.id = caregiverId;//testar
+
+    }
+
 
     public String getId() {
         return id;

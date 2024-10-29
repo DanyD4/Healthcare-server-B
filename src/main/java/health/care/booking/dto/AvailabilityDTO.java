@@ -1,30 +1,18 @@
-package health.care.booking.models;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+package health.care.booking.dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-@Document(collection = "availability")
-public class Availability {
-    @Id
+public class AvailabilityDTO {
     private String id;
-
-    // en doktor/sjuksköterska sätter sig available
-    @DBRef
-    private User caregiverId;
-
-    // en lista med datum som är tillgängliga
+    private String caregiverId;
     private List<LocalDate> availableDates;
-
-    // en lista med tider som är tillgängliga
     private List<LocalTime> availableTimes;
 
-    public Availability() {
+    public AvailabilityDTO() {
     }
+
 
     public String getId() {
         return id;
@@ -34,11 +22,11 @@ public class Availability {
         this.id = id;
     }
 
-    public User getCaregiverId() {
+    public String getCaregiverId() {
         return caregiverId;
     }
 
-    public void setCaregiverId(User caregiverId) {
+    public void setCaregiverId(String caregiverId) {
         this.caregiverId = caregiverId;
     }
 
@@ -57,4 +45,6 @@ public class Availability {
     public void setAvailableTimes(List<LocalTime> availableTimes) {
         this.availableTimes = availableTimes;
     }
+
+
 }
