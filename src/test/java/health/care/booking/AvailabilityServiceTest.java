@@ -54,10 +54,10 @@ public class AvailabilityServiceTest {
 
         when(availabilityRepository.findByCaregiverId(caregiverId)).thenReturn(List.of(availability1, availability2));
 
-        // Act
+        //Act
         List<AvailabilityDTO> result = availabilityService.getAllAvailabilitiesByCaregiverId(caregiverId);
 
-        // Assert
+        //Assert
         assertEquals(2, result.size());
         assertEquals("1", result.get(0).getId());
         assertEquals("2", result.get(1).getId());
@@ -78,10 +78,10 @@ public class AvailabilityServiceTest {
 
         when(availabilityRepository.findByCaregiverIdAndId(caregiverId, availabilityId)).thenReturn(availability);
 
-        // Act
+        //Act test
         AvailabilityDTO result = availabilityService.getAvailabilityById(caregiverId, availabilityId);
 
-        // Assert
+        //Assert
         assertNotNull(result);
         assertEquals(availabilityId, result.getId());
         assertEquals(caregiverId, result.getCaregiverId());
