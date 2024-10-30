@@ -17,7 +17,7 @@ public class AvailabilityController {
     @Autowired
     private AvailabilityService availabilityService;
 
-    @PostMapping("/availability")
+    @PostMapping("/availability") //kan kanske tas bort då generate finns
     public ResponseEntity<?> createAvailability(@RequestBody AvailabilityDTO availabilityDTO) {
         try {
             Availability newAvailability = availabilityService.createAvailability(availabilityDTO);
@@ -32,6 +32,13 @@ public class AvailabilityController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failed to create availability: " + e.getMessage());
         }
     }
+
+    @PostMapping("/generate") //skapa
+    public ResponseEntity<String> generateAvailability(@RequestParam String caregiverId) {
+        availabilityService.generateAvailability(caregiverId);
+        return ResponseEntity.ok("Availability generated successfully");
+    }
+
 
 
     //hämta alla tillgänglighetstider för en specifik vårdgivare

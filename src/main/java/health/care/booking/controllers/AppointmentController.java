@@ -7,6 +7,7 @@ import health.care.booking.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import health.care.booking.models.Status;
 
 import java.util.List;
 
@@ -42,6 +43,17 @@ public class AppointmentController {
        return ResponseEntity.ok(newAppointment);
    }
 
+   /* @PostMapping("/book")
+    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointmentData) throws Exception {
+        User patient = userService.findById(appointmentData.getPatientId())
+                .orElseThrow(() -> new Exception("Patient not found"));
+        User caregiver = userService.findById(appointmentData.getCaregiverId())
+                .orElseThrow(() -> new Exception("Caregiver not found"));
+
+        Appointment newAppointment = appointmentService.bookAppointment(appointmentData);
+        return ResponseEntity.ok(newAppointment);
+    }*/
+
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByPatient(@PathVariable String patientId) throws Exception {
         List<Appointment> appointments = appointmentService.getAppointmentsByPatient(patientId);
@@ -73,13 +85,21 @@ public class AppointmentController {
         }
     }
 
+    @PutMapping("/{appointmentId}/status")
+    public ResponseEntity<Appointment> updateAppointmentStatus(@PathVariable String appointmentId, @RequestParam Status status) {
+        Appointment updatedAppointment = appointmentService.updateAppointmentStatus(appointmentId, status);
+        return ResponseEntity.ok(updatedAppointment);
+    }
+
+
     @DeleteMapping("/{appointmentId}")
-    public ResponseEntity<String> deleteAppointment(@PathVariable String appointmentId, @RequestHeader("Role") String role) {
+    public ResponseEntity<String> cancelAppointment(@PathVariable String appointmentId, @RequestHeader("Role") String role) {
         try {
-            appointmentService.deleteAppointment(appointmentId, role);
+            appointmentService.cancelAppointment(appointmentId, role);
             return ResponseEntity.ok("Appointment canceled successfully");
         } catch (Exception e) {
             return ResponseEntity.status(404).body("Appointment not found");
         }
     }
+
 }
