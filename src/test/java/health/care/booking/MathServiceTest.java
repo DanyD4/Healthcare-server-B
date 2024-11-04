@@ -14,8 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @ActiveProfiles("test")  // Activate the test profile
 @TestPropertySource(properties = {
-        "healthcare-server-B.app.jwtSecret=hfaiehfisehfosndfejndfeswljrfeowfnjehwbewios4ngvhtrwglp4rkledf",
-        "healthcare-server-B.app.jwtExpirationMs=36000000"
+        "jwt.secret=hfaiehfisehfosndfejndfeswljrfeowfnjehwbewios4ngvhtrwglp4rkledf",
+        "jwt.expirationMs=36000000"
 })
 public class MathServiceTest {
 
