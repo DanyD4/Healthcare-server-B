@@ -28,8 +28,9 @@ public class AppointmentService {
     public Appointment createAppointment(Appointment appointment) {
         return appointmentRepository.save(appointment);
     }*/
-    // Skapa en ny bokning
-    public Appointment createAppointment(Appointment appointment) throws Exception {
+
+    //Skapa en ny bokning
+   /* public Appointment createAppointment(Appointment appointment) throws Exception {
         User patient = userRepository.findById(appointment.getPatientId())
                 .orElseThrow(() -> new Exception("Patient not found"));
         User caregiver = userRepository.findById(appointment.getCaregiverId())
@@ -39,10 +40,10 @@ public class AppointmentService {
         appointment.setCaregiverId(caregiver.getId());
 
         return appointmentRepository.save(appointment);
-    }
+    }*/
 
     //Boka en tid
-    public Appointment bookAppointment(Appointment appointmentData) throws Exception {
+    public Appointment createAppointment(Appointment appointmentData) throws Exception {
         //Kontrollera tillgänglighet
         List<AvailabilityDTO> availableSlots = availabilityService.getAllAvailabilitiesByCaregiverId(appointmentData.getCaregiverId());
         boolean isAvailable = availableSlots.stream().anyMatch(slot ->

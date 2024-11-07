@@ -34,17 +34,17 @@ public class AvailabilityService {
     //skapar tillgängliga tider för tre månader framåt
     public void generateAvailability(String caregiverId) {
         LocalDate startDate = LocalDate.now();
-        LocalDate endDate = startDate.plusMonths(3);
+        LocalDate endDate = startDate.plusMonths(1);
 
         List<LocalDate> availableDates = new ArrayList<>();
         List<LocalTime> availableTimes = new ArrayList<>();
 
-        //Lägg till tider från 8:00 till 17:00 varje dag
+        //Lägg till tider från 9 till 17 varje dag
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
             availableDates.add(date);
         }
 
-        for (int hour = 8; hour < 17; hour++) {
+        for (int hour = 9; hour < 17; hour++) {
             availableTimes.add(LocalTime.of(hour, 0));
         }
 
@@ -104,8 +104,6 @@ public class AvailabilityService {
         }
         return null;
     }
-
-
 
 
     //Tar bort en tillgänglighetstid

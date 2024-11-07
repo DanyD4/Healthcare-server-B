@@ -50,7 +50,7 @@ public class AppointmentController {
         User caregiver = userService.findById(appointmentData.getCaregiverId())
                 .orElseThrow(() -> new Exception("Caregiver not found"));
 
-        Appointment newAppointment = appointmentService.bookAppointment(appointmentData);
+        Appointment newAppointment = appointmentService.createAppointment(appointmentData);
         return ResponseEntity.ok(newAppointment);
     }*/
 

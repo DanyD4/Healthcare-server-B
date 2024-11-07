@@ -1,5 +1,7 @@
 package health.care.booking.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -7,7 +9,9 @@ import java.util.List;
 public class AvailabilityDTO {
     private String id;
     private String caregiverId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private List<LocalDate> availableDates;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     private List<LocalTime> availableTimes;
 
     public AvailabilityDTO() {
