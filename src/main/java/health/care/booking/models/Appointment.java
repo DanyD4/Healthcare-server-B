@@ -1,10 +1,10 @@
 package health.care.booking.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Document(collection = "appointment")
 public class Appointment {
@@ -17,9 +17,11 @@ public class Appointment {
     //@DBRef
     private String caregiverId; //user
 
+    private String availabilityId; //testar
+
     // Olika fält för datum och tid
-    private LocalDate date;
-    private LocalTime time;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC" )
+    private LocalDateTime localDateTime;
 
 
     private Status status;
@@ -51,21 +53,6 @@ public class Appointment {
         this.caregiverId = caregiverId;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
-    }
 
     public Status getStatus() {
         return status;
@@ -73,5 +60,21 @@ public class Appointment {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
+
+    public String getAvailabilityId() {
+        return availabilityId;
+    }
+
+    public void setAvailabilityId(String availabilityId) {
+        this.availabilityId = availabilityId;
     }
 }

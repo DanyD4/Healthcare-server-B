@@ -38,21 +38,11 @@ public class AppointmentController {
 
        appointmentData.setPatientId(patient.getId());
        appointmentData.setCaregiverId(caregiver.getId());
+       appointmentData.setAvailabilityId(appointmentData.getAvailabilityId());
 
        Appointment newAppointment = appointmentService.createAppointment(appointmentData);
        return ResponseEntity.ok(newAppointment);
    }
-
-   /* @PostMapping("/book")
-    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointmentData) throws Exception {
-        User patient = userService.findById(appointmentData.getPatientId())
-                .orElseThrow(() -> new Exception("Patient not found"));
-        User caregiver = userService.findById(appointmentData.getCaregiverId())
-                .orElseThrow(() -> new Exception("Caregiver not found"));
-
-        Appointment newAppointment = appointmentService.createAppointment(appointmentData);
-        return ResponseEntity.ok(newAppointment);
-    }*/
 
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByPatient(@PathVariable String patientId) throws Exception {
@@ -87,7 +77,7 @@ public class AppointmentController {
 
     @PutMapping("/{appointmentId}/status")
     public ResponseEntity<Appointment> updateAppointmentStatus(@PathVariable String appointmentId, @RequestParam Status status) {
-        Appointment updatedAppointment = appointmentService.updateAppointmentStatus(appointmentId, status);
+        Appointment updatedAppointment = appointmentService.updateAppointmentStatus(appointmentId, status); //uppdaterar statusen för en bokning med hjälp av appointmentService
         return ResponseEntity.ok(updatedAppointment);
     }
 

@@ -1,11 +1,12 @@
 package health.care.booking.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "availability")
@@ -17,11 +18,13 @@ public class Availability {
     @DBRef
     private User caregiverId;
 
-    // en lista med datum som är tillgängliga
-    private List<LocalDate> availableDates;
 
     // en lista med tider som är tillgängliga
-    private List<LocalTime> availableTimes;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+    private List<LocalDateTime> availableSlots = new ArrayList<>();
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+    private List<LocalDateTime> bookedSlots = new ArrayList<>();
 
     public Availability() {
     }
@@ -42,19 +45,20 @@ public class Availability {
         this.caregiverId = caregiverId;
     }
 
-    public List<LocalDate> getAvailableDates() {
-        return availableDates;
+    public List<LocalDateTime> getAvailableSlots() {
+        return availableSlots;
     }
 
-    public void setAvailableDates(List<LocalDate> availableDates) {
-        this.availableDates = availableDates;
+    public void setAvailableSlots(List<LocalDateTime> availableSlots) {
+        this.availableSlots = availableSlots;
     }
 
-    public List<LocalTime> getAvailableTimes() {
-        return availableTimes;
+    public List<LocalDateTime> getBookedSlots() {
+        return bookedSlots;
     }
 
-    public void setAvailableTimes(List<LocalTime> availableTimes) {
-        this.availableTimes = availableTimes;
+    public void setBookedSlots(List<LocalDateTime> bookedSlots) {
+        this.bookedSlots = bookedSlots;
     }
+
 }
