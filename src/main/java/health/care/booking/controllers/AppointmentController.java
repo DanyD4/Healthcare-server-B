@@ -7,6 +7,7 @@ import health.care.booking.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import health.care.booking.models.Status;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class AppointmentController {
 
        appointmentData.setPatientId(patient.getId());
        appointmentData.setCaregiverId(caregiver.getId());
+       appointmentData.setAvailabilityId(appointmentData.getAvailabilityId());
 
        Appointment newAppointment = appointmentService.createAppointment(appointmentData);
        return ResponseEntity.ok(newAppointment);
@@ -73,13 +75,21 @@ public class AppointmentController {
         }
     }
 
+    @PutMapping("/{appointmentId}/status")
+    public ResponseEntity<Appointment> updateAppointmentStatus(@PathVariable String appointmentId, @RequestParam Status status) {
+        Appointment updatedAppointment = appointmentService.updateAppointmentStatus(appointmentId, status); //uppdaterar statusen för en bokning med hjälp av appointmentService
+        return ResponseEntity.ok(updatedAppointment);
+    }
+
+
     @DeleteMapping("/{appointmentId}")
-    public ResponseEntity<String> deleteAppointment(@PathVariable String appointmentId, @RequestHeader("Role") String role) {
+    public ResponseEntity<String> cancelAppointment(@PathVariable String appointmentId, @RequestHeader("Role") String role) {
         try {
-            appointmentService.deleteAppointment(appointmentId, role);
+            appointmentService.cancelAppointment(appointmentId, role);
             return ResponseEntity.ok("Appointment canceled successfully");
         } catch (Exception e) {
             return ResponseEntity.status(404).body("Appointment not found");
         }
     }
+
 }

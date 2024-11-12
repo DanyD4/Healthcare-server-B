@@ -45,13 +45,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         //fyll på här när ni lägger till controllers, vill ni ha rollbaserat
                         // chaina på hasRole eller hasAnyRole
-                        .requestMatchers("/api/auth/**").permitAll() //la till denna för att testa/dany
+                        .requestMatchers("/api/auth/availability/**").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/auth/register").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/appointment").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

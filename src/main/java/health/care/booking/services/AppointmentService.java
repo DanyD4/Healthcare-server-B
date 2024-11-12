@@ -1,6 +1,8 @@
 package health.care.booking.services;
 
+import health.care.booking.dto.AvailabilityDTO;
 import health.care.booking.models.Appointment;
+import health.care.booking.models.Status;
 import health.care.booking.models.User;
 import health.care.booking.respository.AppointmentRepository;
 import health.care.booking.respository.UserRepository;
@@ -18,13 +20,17 @@ public class AppointmentService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AvailabilityService availabilityService;
+
 
    /* // Skapa en ny bokning
     public Appointment createAppointment(Appointment appointment) {
         return appointmentRepository.save(appointment);
     }*/
-    // Skapa en ny bokning
-    public Appointment createAppointment(Appointment appointment) throws Exception {
+
+    //Skapa en ny bokning
+   /* public Appointment createAppointment(Appointment appointment) throws Exception {
         User patient = userRepository.findById(appointment.getPatientId())
                 .orElseThrow(() -> new Exception("Patient not found"));
         User caregiver = userRepository.findById(appointment.getCaregiverId())
@@ -34,9 +40,53 @@ public class AppointmentService {
         appointment.setCaregiverId(caregiver.getId());
 
         return appointmentRepository.save(appointment);
+    }*/
+
+    //Boka en tid
+    public Appointment createAppointment(Appointment appointmentData) throws Exception {
+        //Kontrollera tillgänglighet
+        List<AvailabilityDTO> availableSlots = availabilityService.getAllAvailabilitiesByCaregiverId(appointmentData.getCaregiverId());
+        boolean isAvailable = availableSlots.stream().anyMatch(slot ->
+                slot.getAvailableSlots().contains(appointmentData.getLocalDateTime()) &&
+                        !slot.getBookedSlots().contains(appointmentData.getLocalDateTime())
+        );
+
+        if (!isAvailable) {
+            throw new Exception("Tiden är inte tillgänglig"); //kommm
+        }
+
+        //Uppdatera tillgänglighetslistan
+        AvailabilityDTO availability = availableSlots.stream()
+                //Hitta den tillgänglighet som innehåller den önskade tiden
+                .filter(slot -> slot.getAvailableSlots().contains(appointmentData.getLocalDateTime()))
+                .findFirst()
+                .orElseThrow(() -> new Exception("Tillgänglighet hittades inte"));
+
+        //lägger till den bokade tiden i listan över bokade tider
+        availability.getBookedSlots().add(appointmentData.getLocalDateTime());
+        //Uppdatera tillgängligheten med den nya bokade tiden
+        availabilityService.updateAvailability(availability.getId(), availability);
+
+
+        //skapa bokning
+        appointmentData.setStatus(Status.SCHEDULED);
+        return appointmentRepository.save(appointmentData);
     }
 
-    // Hämta alla bokningar för en specifik patient baserat på patientens ID
+
+    //Uppdatera status för en bokning
+    public Appointment updateAppointmentStatus(String appointmentId, Status status) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)  //Hitta bokningen med hjälp av id
+                .orElseThrow(() -> new RuntimeException("Bokning inte hittad"));
+
+        //uppdatera statusen för bokningen
+        appointment.setStatus(status);
+        return appointmentRepository.save(appointment);
+    }
+
+
+
+    //Hämta alla bokningar för en specifik patient baserat på patientens ID
     public List<Appointment> getAppointmentsByPatient(String patientId) throws Exception {
         User patient = userRepository.findById(patientId)
                 .orElseThrow(() -> new Exception("User not found"));
@@ -46,7 +96,7 @@ public class AppointmentService {
 
     }
 
-    // Hämta alla bokningar för en specifik vårdgivare baserat på caregiverId
+    //Hämta alla bokningar för en specifik vårdgivare baserat på caregiverId
     public List<Appointment> getAppointmentsByCaregiver(String caregiverId) throws Exception {
         User caregiver = userRepository.findById(caregiverId)
                 .orElseThrow(() -> new Exception("User not found"));
@@ -56,7 +106,7 @@ public class AppointmentService {
 
     }
 
-    // Hämta en specifik bokning via patientId och boknings-ID
+    //Hämta en specifik bokning via patientId och boknings-ID
     public Appointment getAppointmentById(String patientId, String appointmentId) throws Exception {
         User patient = userRepository.findById(patientId)
                 .orElseThrow(() -> new Exception("User not found"));
@@ -65,7 +115,7 @@ public class AppointmentService {
         return appointmentRepository.findByPatientIdAndId(patient.getId(), appointmentId);
     }
 
-    // Uppdatera en bokning (endast för administratörer)
+    //Uppdatera en bokning (endast för administratörer)
     public Appointment updateAppointment(String appointmentId, Appointment updatedAppointment, String role) throws Exception {
         if (!role.equals("admin")) {
             throw new Exception("Only admin can update appointments");
@@ -74,14 +124,13 @@ public class AppointmentService {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new Exception("Appointment not found"));
 
-        appointment.setDate(updatedAppointment.getDate());
-        appointment.setTime(updatedAppointment.getTime());
+        appointment.setLocalDateTime(updatedAppointment.getLocalDateTime());
         appointment.setStatus(updatedAppointment.getStatus());
 
         return appointmentRepository.save(appointment);
     }
 
-    // Ta bort en bokning (kan utföras av både användare och admin)
+  /* // Ta bort en bokning (kan utföras av både användare och admin)
     public void deleteAppointment(String appointmentId, String role) throws Exception {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new Exception("Appointment not found"));
@@ -97,5 +146,27 @@ public class AppointmentService {
         } else {
             System.out.println("User has canceled the appointment with ID " + appointmentId);
         }
+    }*/
+
+    //Avbokar en bokning och uppdaterar status till CANCELLED
+    public void cancelAppointment(String appointmentId, String role) throws Exception {
+        Appointment appointment = appointmentRepository.findById(appointmentId) //Hitta bokningen med hjälp av id
+                .orElseThrow(() -> new Exception("Appointment not found"));
+
+        //Uppdatera status till CANCELLED
+        appointment.setStatus(Status.CANCELLED);
+        appointmentRepository.save(appointment);
+
+        //Gör den avbokade tiden tillgänglig igen
+        AvailabilityDTO availability = availabilityService.getAvailabilityById(appointment.getCaregiverId(), appointment.getAvailabilityId());
+        //Tar bort den avbokade tiden från listan över bokade tider
+        availability.getBookedSlots().remove(appointment.getLocalDateTime());
+        //Lägger till den avbokade tiden i listan över tillgängliga tider
+        availability.getAvailableSlots().add(appointment.getLocalDateTime());
+
+        //Uppdaterar tillgängligheten med den nya tillgängliga tiden
+        availabilityService.updateAvailability(availability.getId(), availability);
+
+        System.out.println("Appointment with ID " + appointmentId + " has been cancelled.");
     }
 }
