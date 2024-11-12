@@ -1,18 +1,19 @@
 package health.care.booking.controllers;
 
+import health.care.booking.dto.AppointmentDTO;
 import health.care.booking.models.Appointment;
-import health.care.booking.models.User;
+import health.care.booking.models.Status;
 import health.care.booking.services.AppointmentService;
 import health.care.booking.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import health.care.booking.models.Status;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/appointments")
+@RequestMapping("/appointments")
 public class AppointmentController {
 
     @Autowired
@@ -22,14 +23,18 @@ public class AppointmentController {
     @Autowired
     private UserService userService;
 
-
+    @PostMapping("/create")
+    public ResponseEntity<?> createAppointment(@Valid @RequestBody AppointmentDTO appointmentDTO) {
+        appointmentService.createAppointment(appointmentDTO);
+        return ResponseEntity.ok("Appointment created successfully." );
+    }
 
    /* @PostMapping
     public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointmentData) {
         Appointment newAppointment = appointmentService.createAppointment(appointmentData);
         return ResponseEntity.ok(newAppointment);
     }*/
-   @PostMapping
+   /*@PostMapping
    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointmentData) throws Exception {
        User patient = userService.findById(appointmentData.getPatientId())
                .orElseThrow(() -> new Exception("Patient not found"));
@@ -42,15 +47,15 @@ public class AppointmentController {
 
        Appointment newAppointment = appointmentService.createAppointment(appointmentData);
        return ResponseEntity.ok(newAppointment);
-   }
+   }*/
 
-    @GetMapping("/patient/{patientId}")
+    @GetMapping("patient/{patientId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByPatient(@PathVariable String patientId) throws Exception {
         List<Appointment> appointments = appointmentService.getAppointmentsByPatient(patientId);
         return ResponseEntity.ok(appointments);
     }
 
-    @GetMapping("/caregiver/{caregiverId}")
+    @GetMapping("caregiver/{caregiverId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByCaregiver(@PathVariable String caregiverId) throws Exception {
         List<Appointment> appointments = appointmentService.getAppointmentsByCaregiver(caregiverId);
         return ResponseEntity.ok(appointments);
@@ -82,7 +87,7 @@ public class AppointmentController {
     }
 
 
-    @DeleteMapping("/{appointmentId}")
+    /*@DeleteMapping("/{appointmentId}")
     public ResponseEntity<String> cancelAppointment(@PathVariable String appointmentId, @RequestHeader("Role") String role) {
         try {
             appointmentService.cancelAppointment(appointmentId, role);
@@ -90,6 +95,6 @@ public class AppointmentController {
         } catch (Exception e) {
             return ResponseEntity.status(404).body("Appointment not found");
         }
-    }
+    }*/
 
 }

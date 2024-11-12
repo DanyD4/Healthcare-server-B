@@ -1,9 +1,6 @@
 package health.care.booking.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,27 +9,20 @@ import java.util.List;
 //Sedan skickar man tillbaka detta objekt som svar till klienten.
 
 public class AvailabilityDTO {
-    private String id;
-    private String caregiverId;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+    private String caregiverId;
+    private List<LocalDateTime> availableSlots;
+
+   /* @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     private List<LocalDateTime> availableSlots = new ArrayList<>();
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-    private List<LocalDateTime> bookedSlots = new ArrayList<>();
+    private List<LocalDateTime> bookedSlots = new ArrayList<>();*/
 
 
     public AvailabilityDTO() {
     }
 
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getCaregiverId() {
         return caregiverId;
@@ -51,11 +41,6 @@ public class AvailabilityDTO {
         this.availableSlots = availableSlots;
     }
 
-    public List<LocalDateTime> getBookedSlots() {
-        return bookedSlots;
-    }
 
-    public void setBookedSlots(List<LocalDateTime> bookedSlots) {
-        this.bookedSlots = bookedSlots;
-    }
+
 }

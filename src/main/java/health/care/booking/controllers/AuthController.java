@@ -4,17 +4,13 @@ import health.care.booking.dto.AuthRequest;
 import health.care.booking.dto.AuthResponse;
 import health.care.booking.dto.RegisterRequest;
 import health.care.booking.dto.RegisterResponse;
-import health.care.booking.models.ERole;
 import health.care.booking.models.Role;
 import health.care.booking.models.User;
-import health.care.booking.respository.RoleRepository;
 import health.care.booking.services.CustomUserDetailsService;
 import health.care.booking.services.UserService;
 import health.care.booking.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,12 +26,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -49,22 +43,14 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-
-    @Autowired
-    private RoleRepository roleRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Lagt till lite loggers för när jag felsökte kan tas bort sedan.
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request,
                                    HttpServletResponse response) {
-        Logger logger = LoggerFactory.getLogger(AuthController.class);
 
         try {
-            logger.info("Authenticating user: {}", request.getUsername());
-            logger.info("Password from request: {}", request.getPassword());
             // authenticate the user
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -78,7 +64,6 @@ public class AuthController {
 
             // get UserDetails
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            logger.info("User authenticated: {}", userDetails.getUsername());
 
             // generate JWT token
             String jwt = jwtUtil.generateToken(userDetails);
@@ -96,37 +81,30 @@ public class AuthController {
             response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
 
             // return response without JWT in body
-            User user = userService.findByUsername(userDetails.getUsername());
-            Set<ERole> roles = user.getRoles().stream()
-                    .map(Role::getRoleP)
-                    .collect(Collectors.toSet());
-
             AuthResponse authResponse = new AuthResponse(
-                    jwt, // JWT token
+                    "Login successful",
                     userDetails.getUsername(),
-                    roles
+                    userService.findByUsername(userDetails.getUsername()).getRoles()
             );
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                     .body(authResponse);
 
-        }  catch (AuthenticationException e) {
-            logger.error("Authentication failed for user: {}", request.getUsername(), e);
-            // Authentication failed
+        } catch (AuthenticationException e) {
+            // Aauthentication failed
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body("Incorrect username or password");
         }
     }
-// Lagt till lite loggers för när jag felsökte kan tas bort sedan.
+
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
-        Logger logger = LoggerFactory.getLogger(AuthController.class);
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
 
         // check if the username already exists
-        if (userService.existsByUsername(registerRequest.getUsername())) {
+        if (userService.existsByUsername(request.getUsername())) {
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .body("Username is already taken");
@@ -134,32 +112,14 @@ public class AuthController {
 
         // map the registration request to a User entity
         User user = new User();
-        user.setUsername(registerRequest.getUsername());
-        String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
-        user.setPassword(registerRequest.getPassword());
-        //user.setPassword(encodedPassword);
-        logger.info("Encoded password: {}", encodedPassword);
-        //user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        user.setEmail(registerRequest.getEmail());
-        user.setFirstName(registerRequest.getFirstName());
-        user.setLastName(registerRequest.getLastName());
-        user.setStreet(registerRequest.getStreet());
-        user.setCity(registerRequest.getCity());
-        user.setState(registerRequest.getState());
-        user.setZipcode(registerRequest.getZipcode());
-
-
-
+        user.setUsername(request.getUsername());
+        user.setPassword(request.getPassword());
 
         // assign roles
-        if (registerRequest.getRoles() == null || registerRequest.getRoles().isEmpty()) {
-            Optional<Role> userRole = roleRepository.findByRoleP(ERole.ROLE_USER);
-            userRole.ifPresent(role -> user.setRoles(Set.of(role)));
+        if (request.getRoles() == null || request.getRoles().isEmpty()) {
+            user.setRoles(Set.of(Role.USER));
         } else {
-            Set<Role> roles = registerRequest.getRoles().stream()
-                    .map(role -> roleRepository.findByRoleP(role).orElseThrow(() -> new RuntimeException("Role not found")))
-                    .collect(Collectors.toSet());
-            user.setRoles(roles);
+            user.setRoles(request.getRoles());
         }
 
         // register the user using UserService
@@ -169,9 +129,7 @@ public class AuthController {
         RegisterResponse regResponse = new RegisterResponse(
                 "User registered successfully",
                 user.getUsername(),
-                user.getRoles().stream()
-                        .map(Role::getRoleP)
-                        .collect(Collectors.toSet())
+                user.getRoles()
         );
 
         return ResponseEntity.ok(regResponse);
@@ -207,15 +165,11 @@ public class AuthController {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());
-        Set<ERole> roles = user.getRoles().stream()
-                .map(Role::getRoleP)
-                .collect(Collectors.toSet());
 
         return ResponseEntity.ok(new AuthResponse(
                 "Authenticated",
                 user.getUsername(),
-                roles
+                user.getRoles()
         ));
     }
-
 }
