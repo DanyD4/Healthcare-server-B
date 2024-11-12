@@ -26,7 +26,7 @@ public class AvailabilityController {
     }
 
     // hämta alla som tillhör en caregiver
-    @GetMapping("/{caregiverId}")
+    @GetMapping("caregiver/{caregiverId}")
     public ResponseEntity<List<Availability>> getAvailabilityByCaregiverId(@PathVariable String caregiverId) {
         List<Availability> availabilities = availabilityService.getAvailabilityByCaregiverId(caregiverId);
         return new ResponseEntity<>(availabilities, HttpStatus.OK);

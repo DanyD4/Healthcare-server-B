@@ -17,8 +17,6 @@ public class Appointment {
     //@DBRef
     private String caregiverId; //user
 
-    private String availabilityId; //testar
-
     // Olika fält för datum och tid
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC" )
     private LocalDateTime localDateTime;
@@ -70,11 +68,5 @@ public class Appointment {
         this.localDateTime = localDateTime;
     }
 
-    public String getAvailabilityId() {
-        return availabilityId;
-    }
 
-    public void setAvailabilityId(String availabilityId) {
-        this.availabilityId = availabilityId;
-    }
 }

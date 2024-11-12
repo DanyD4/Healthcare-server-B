@@ -49,8 +49,8 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/availability/**").hasRole("ADMIN")
-                        .requestMatchers("/appointments").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/availability/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/appointments/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

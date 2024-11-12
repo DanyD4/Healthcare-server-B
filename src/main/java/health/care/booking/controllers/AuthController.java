@@ -84,7 +84,8 @@ public class AuthController {
             AuthResponse authResponse = new AuthResponse(
                     "Login successful",
                     userDetails.getUsername(),
-                    userService.findByUsername(userDetails.getUsername()).getRoles()
+                    userService.findByUsername(userDetails.getUsername()).getRoles(),
+                    userService.findByUsername(userDetails.getUsername()).getId()
             );
 
             return ResponseEntity.ok()
