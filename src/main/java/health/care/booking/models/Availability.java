@@ -1,12 +1,10 @@
 package health.care.booking.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "availability")
@@ -18,13 +16,14 @@ public class Availability {
     @DBRef
     private User caregiverId;
 
+    private List<LocalDateTime> availableSlots;
 
     // en lista med tider som är tillgängliga
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+   /* @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     private List<LocalDateTime> availableSlots = new ArrayList<>();
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-    private List<LocalDateTime> bookedSlots = new ArrayList<>();
+    private List<LocalDateTime> bookedSlots = new ArrayList<>();*/
 
     public Availability() {
     }
@@ -53,12 +52,14 @@ public class Availability {
         this.availableSlots = availableSlots;
     }
 
-    public List<LocalDateTime> getBookedSlots() {
+
+
+   /* public List<LocalDateTime> getBookedSlots() {
         return bookedSlots;
     }
 
     public void setBookedSlots(List<LocalDateTime> bookedSlots) {
         this.bookedSlots = bookedSlots;
-    }
+    }*/
 
 }
