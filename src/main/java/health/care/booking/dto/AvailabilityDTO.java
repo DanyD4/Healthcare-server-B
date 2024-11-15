@@ -8,16 +8,17 @@ import java.util.List;
 //sätter id, vårdgivarens id och de tillgängliga tiderna i detta objekt.
 //Sedan skickar man tillbaka detta objekt som svar till klienten.
 
+
+/* @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+    private List<LocalDateTime> availableSlots;*/
+
+
 public class AvailabilityDTO {
 
     private String caregiverId;
     private List<LocalDateTime> availableSlots;
 
-   /* @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-    private List<LocalDateTime> availableSlots = new ArrayList<>();
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-    private List<LocalDateTime> bookedSlots = new ArrayList<>();*/
 
 
     public AvailabilityDTO() {

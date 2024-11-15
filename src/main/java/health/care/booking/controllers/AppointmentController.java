@@ -29,25 +29,7 @@ public class AppointmentController {
         return ResponseEntity.ok("Appointment created successfully." );
     }
 
-   /* @PostMapping
-    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointmentData) {
-        Appointment newAppointment = appointmentService.createAppointment(appointmentData);
-        return ResponseEntity.ok(newAppointment);
-    }*/
-   /*@PostMapping
-   public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointmentData) throws Exception {
-       User patient = userService.findById(appointmentData.getPatientId())
-               .orElseThrow(() -> new Exception("Patient not found"));
-       User caregiver = userService.findById(appointmentData.getCaregiverId())
-               .orElseThrow(() -> new Exception("Caregiver not found"));
 
-       appointmentData.setPatientId(patient.getId());
-       appointmentData.setCaregiverId(caregiver.getId());
-       appointmentData.setAvailabilityId(appointmentData.getAvailabilityId());
-
-       Appointment newAppointment = appointmentService.createAppointment(appointmentData);
-       return ResponseEntity.ok(newAppointment);
-   }*/
 
     @GetMapping("patient/{patientId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByPatient(@PathVariable String patientId) throws Exception {
@@ -86,7 +68,25 @@ public class AppointmentController {
         return ResponseEntity.ok(updatedAppointment);
     }
 
+   /* @PostMapping
+    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointmentData) {
+        Appointment newAppointment = appointmentService.createAppointment(appointmentData);
+        return ResponseEntity.ok(newAppointment);
+    }*/
+   /*@PostMapping
+   public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointmentData) throws Exception {
+       User patient = userService.findById(appointmentData.getPatientId())
+               .orElseThrow(() -> new Exception("Patient not found"));
+       User caregiver = userService.findById(appointmentData.getCaregiverId())
+               .orElseThrow(() -> new Exception("Caregiver not found"));
 
+       appointmentData.setPatientId(patient.getId());
+       appointmentData.setCaregiverId(caregiver.getId());
+       appointmentData.setAvailabilityId(appointmentData.getAvailabilityId());
+
+       Appointment newAppointment = appointmentService.createAppointment(appointmentData);
+       return ResponseEntity.ok(newAppointment);
+   }*/
     /*@DeleteMapping("/{appointmentId}")
     public ResponseEntity<String> cancelAppointment(@PathVariable String appointmentId, @RequestHeader("Role") String role) {
         try {

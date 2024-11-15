@@ -30,13 +30,6 @@ public class AvailabilityService {
 
     //Skapar en ny tillgänglighetstid
     public Availability createAvailability(AvailabilityDTO availabilityDTO) {
-      //  Availability availability = new Availability();  //Skapar ett nytt availability objekt
-      //  availability.setId(availabilityDTO.getId());  //Sätter id för tillgängligheten
-      //  availability.setCaregiverId(new User(availabilityDTO.getCaregiverId()));  //Sätter vårdgivarens id för tillgängligheten
-     //   availability.setAvailableSlots(availabilityDTO.getAvailableSlots()); //Sättet de tillgängliga tiderna för tillgängligheten
-
-
-        // 1. kolla att usern finns...
         User caregiver = userRepository.findById(availabilityDTO.getCaregiverId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid caregiver ID"));
 
@@ -66,6 +59,13 @@ public class AvailabilityService {
         return availabilityRepository.findById(id);
     }
 
+    // Avbokar en bokad tid och gör den tillgänglig igen
+    public void deleteAvailability(String availabilityId) throws Exception {
+        Availability availability = availabilityRepository.findById(availabilityId)
+                .orElseThrow(() -> new Exception("Appointment not found"));
+        availabilityRepository.deleteById(availabilityId);
+
+    }
 
 
     //Lägg till en tillgängligtid
@@ -124,13 +124,6 @@ public class AvailabilityService {
 
     //Tar bort en tillgänglighetstid
 
-    // Avbokar en bokad tid och gör den tillgänglig igen
-    public void deleteAvailability(String availabilityId) throws Exception {
-        Availability availability = availabilityRepository.findById(availabilityId)
-                .orElseThrow(() -> new Exception("Appointment not found"));
-        availabilityRepository.deleteById(availabilityId);
-
-    }
 
 
 
