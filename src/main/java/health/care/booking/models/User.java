@@ -54,4 +54,8 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

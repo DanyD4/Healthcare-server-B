@@ -1,6 +1,10 @@
 package health.care.booking;
 
+import health.care.booking.dto.AvailabilityDTO;
+import health.care.booking.models.Availability;
+import health.care.booking.models.User;
 import health.care.booking.respository.AvailabilityRepository;
+import health.care.booking.respository.UserRepository;
 import health.care.booking.services.AvailabilityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +15,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -20,115 +30,143 @@ import static org.mockito.Mockito.*;
         "jwt.expirationMs=36000000"
 })
 
-public class AvailabilityServiceTest {
 
+
+public class AvailabilityServiceTest {
 
     @Mock
     private AvailabilityRepository availabilityRepository;
+
+
+    @Mock
+    private UserRepository userRepository;
 
     @InjectMocks
     private AvailabilityService availabilityService;
 
     @BeforeEach
-    public void setup() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
 
+    //Arrange: Förbered allt du behöver för testet (skapa objekt, ställ in mockar).
+    //Act: Utför handlingen du vill testa (anropa metoden).
+    //Assert: Kontrollera att resultatet är som förväntat (använd assertions).
 
     @Test
-    public void testGetAllAvailabilitiesByCaregiverId() {
-        // Arrange
-        /*String caregiverId = "caregiver1";
+    public void testCreateAvailability() {
+        //Arrange
+        AvailabilityDTO availabilityDTO = new AvailabilityDTO();
+        availabilityDTO.setCaregiverId("caregiver1");
+        availabilityDTO.setAvailableSlots(Arrays.asList(LocalDateTime.now(), LocalDateTime.now().plusHours(1)));
+
+        User caregiver = new User();
+        caregiver.setId("1");
+        caregiver.setUsername("caregiver1");
+
+        Availability availabilityToSave = new Availability();
+        availabilityToSave.setCaregiverId(caregiver);
+        availabilityToSave.setAvailableSlots(availabilityDTO.getAvailableSlots());
+
+        Availability savedAvailability = new Availability();
+        savedAvailability.setId("1");
+        savedAvailability.setCaregiverId(caregiver);
+        savedAvailability.setAvailableSlots(availabilityDTO.getAvailableSlots());
+
+        when(userRepository.findById("caregiver1")).thenReturn(Optional.of(caregiver));
+        when(availabilityRepository.save(any(Availability.class))).thenReturn(savedAvailability);
+
+        //Act
+        Availability result = availabilityService.createAvailability(availabilityDTO);
+
+        //Assert
+        assertNotNull(result);
+        assertEquals("1", result.getId());
+        assertEquals(availabilityDTO.getAvailableSlots(), result.getAvailableSlots());
+    }
+
+
+
+
+    @Test
+    public void testGetAllAvailabilities() {
+        //Arrange
         Availability availability1 = new Availability();
         availability1.setId("1");
-        availability1.setCaregiverId(new User(caregiverId));
-        availability1.setAvailableDates(List.of(LocalDate.of(2024, 10, 29)));
-        availability1.setAvailableTimes(List.of(LocalTime.of(10, 0)));
-
         Availability availability2 = new Availability();
         availability2.setId("2");
-        availability2.setCaregiverId(new User(caregiverId));
-        availability2.setAvailableDates(List.of(LocalDate.of(2024, 10, 30)));
-        availability2.setAvailableTimes(List.of(LocalTime.of(11, 0)));
 
-        when(availabilityRepository.findByCaregiverId(caregiverId)).thenReturn(List.of(availability1, availability2));
+        when(availabilityRepository.findAll()).thenReturn(Arrays.asList(availability1, availability2));
 
-        //Act testgdi
-        List<AvailabilityDTO> result = availabilityService.getAllAvailabilitiesByCaregiverId(caregiverId);
+        //Act
+        List<Availability> result = availabilityService.getAllAvailabilities();
 
         //Assert
         assertEquals(2, result.size());
-        assertEquals("1", result.get(0).getId());
-        assertEquals("2", result.get(1).getId());
-        verify(availabilityRepository, times(1)).findByCaregiverId(caregiverId);*/
     }
 
     @Test
-    public void testGetAvailabilityById() {
-        // Arrange
-        /*String caregiverId = "caregiver1";
-        String availabilityId = "1";
+    public void testGetAvailabilityByCaregiverId() {
+        //Arrange
+        User caregiver = new User();
+        caregiver.setId("1");
+        caregiver.setUsername("caregiver1");
+
         Availability availability = new Availability();
-        availability.setId(availabilityId);
-        User caregiver = new User(caregiverId);
+        availability.setId("1");
         availability.setCaregiverId(caregiver);
-        availability.setAvailableDates(List.of(LocalDate.of(2024, 10, 29)));
-        availability.setAvailableTimes(List.of(LocalTime.of(10, 0)));
 
-        when(availabilityRepository.findByCaregiverIdAndId(caregiverId, availabilityId)).thenReturn(availability);
+        when(userRepository.findById("1")).thenReturn(Optional.of(caregiver));
+        when(availabilityRepository.findByCaregiverId("1")).thenReturn(Arrays.asList(availability));
 
-        //Act test
-        AvailabilityDTO result = availabilityService.getAvailabilityById(caregiverId, availabilityId);
+        //act
+        List<Availability> result = availabilityService.getAvailabilityByCaregiverId("1");
 
         //Assert
-        assertNotNull(result);
-        assertEquals(availabilityId, result.getId());
-        assertEquals(caregiverId, result.getCaregiverId());
-        assertEquals(List.of(LocalDate.of(2024, 10, 29)), result.getAvailableDates());
-        assertEquals(List.of(LocalTime.of(10, 0)), result.getAvailableTimes());
-        verify(availabilityRepository, times(1)).findByCaregiverIdAndId(caregiverId, availabilityId);*/
+        assertEquals(1, result.size());
+        assertEquals("1", result.get(0).getId());
     }
 
+    @Test
+    public void testGetAvailabilityByCaregiverId_InvalidCaregiverUsername() {
+        //Arrange
+        when(userRepository.findById("invalid")).thenReturn(Optional.empty());
+
+        //Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            availabilityService.getAvailabilityByCaregiverId("invalid");
+        });
+    }
 
     @Test
-    public void testUpdateAvailability() {
-        // Arrange
-        /*String availabilityId = "1";
+    public void testCreateAvailability_InvalidCaregiverUsername() {
+        //Arrange
         AvailabilityDTO availabilityDTO = new AvailabilityDTO();
-        availabilityDTO.setAvailableDates(List.of(LocalDate.of(2024, 11, 1)));
-        availabilityDTO.setAvailableTimes(List.of(LocalTime.of(12, 0)));
+        availabilityDTO.setCaregiverId("invalid");
 
-        Availability availability = new Availability();
-        availability.setId(availabilityId);
-        availability.setAvailableDates(List.of(LocalDate.of(2024, 10, 29)));
-        availability.setAvailableTimes(List.of(LocalTime.of(10, 0)));
+        when(userRepository.findById("invalid")).thenReturn(Optional.empty());
 
-        when(availabilityRepository.findById(availabilityId)).thenReturn(Optional.of(availability));
-        when(availabilityRepository.save(any(Availability.class))).thenReturn(availability);
-
-        // Act
-        Availability result = availabilityService.updateAvailability(availabilityId, availabilityDTO);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(List.of(LocalDate.of(2024, 11, 1)), result.getAvailableDates());
-        assertEquals(List.of(LocalTime.of(12, 0)), result.getAvailableTimes());
-        verify(availabilityRepository, times(1)).findById(availabilityId);
-        verify(availabilityRepository, times(1)).save(any(Availability.class));*/
+        //Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            availabilityService.createAvailability(availabilityDTO);
+        });
     }
 
+
+
     @Test
-    public void testDeleteAvailability() {
-        // Arrange
-        String availabilityId = "1";
+    public void testDeleteAvailability_NotFound() {
+        //Arrange
+        when(availabilityRepository.findById("invalid")).thenReturn(Optional.empty());
 
-        doNothing().when(availabilityRepository).deleteById(availabilityId);
+        //Act & Assert
+        assertThrows(Exception.class, () -> {
+            availabilityService.deleteAvailability("invalid");
+        });
 
-        // Act
-       // availabilityService.deleteAvailability(availabilityId);
 
-        // Assert
-        verify(availabilityRepository, times(1)).deleteById(availabilityId);
     }
 }
+
+

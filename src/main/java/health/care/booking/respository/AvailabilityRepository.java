@@ -12,5 +12,5 @@ public interface AvailabilityRepository extends MongoRepository<Availability, St
     List<Availability> findByCaregiverId(String caregiverId);
 
     //Hämtar en specifik tillgänglighetstid för en vårdgivare baserat på caregiverId och availabilityId
-    Availability findByCaregiverIdAndId(String caregiverId, String availabilityId);
+   // Availability findByCaregiverIdAndId(String caregiverId, String availabilityId);
 }
